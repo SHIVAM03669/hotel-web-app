@@ -1,0 +1,26 @@
+<div class="row justify-content-center">
+  <div class="col-md-5">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h4 class="mb-3">Sign In</h4>
+        <div class="mb-3">
+          <label class="form-label">Username</label>
+          <input class="form-control" [(ngModel)]="username" name="username" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <input class="form-control" type="password" [(ngModel)]="password" name="password" />
+        </div>
+        @if (error) {
+          <div class="alert alert-danger py-2">{{ error }}</div>
+        }
+        <button class="btn btn-primary w-100" [disabled]="loading" (click)="submit()">
+          {{ loading ? 'Signing in...' : 'Login' }}
+        </button>
+        <small class="text-muted d-block mt-3">
+          Demo users: <code>admin/admin123</code> or <code>user/user123</code>
+        </small>
+      </div>
+    </div>
+  </div>
+</div>

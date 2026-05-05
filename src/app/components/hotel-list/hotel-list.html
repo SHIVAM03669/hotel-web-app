@@ -1,0 +1,79 @@
+<div class="card mb-4">
+  <div class="card-body">
+    <div class="row g-2 align-items-end">
+      <div class="col-md-4">
+        <label class="form-label">Filter by city</label>
+        <input class="form-control" [(ngModel)]="city" />
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-outline-primary w-100" (click)="searchHotels()">Search</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@if (!hasSearched) {
+  <div class="alert alert-info py-2">Use city filter (optional) and click Search to load hotels.</div>
+} @else if (loadingHotels) {
+  <div class="row g-3" aria-label="Loading hotels">
+    @for (_ of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track $index) {
+      <div class="col-md-4">
+        <app-skeleton-screen variant="card" />
+      </div>
+    }
+  </div>
+} @else {
+  <div class="row g-3">
+    @for (hotel of hotels; track hotel.id) {
+      <div class="col-md-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5>{{ hotel.name }}</h5>
+            <p class="mb-1">{{ hotel.city }} - {{ hotel.address }}</p>
+            <p class="text-muted">{{ hotel.description }}</p>
+            <p class="mb-1">Price/Night: ₹{{ hotel.pricePerNight }}</p>
+            <p class="mb-2">Available Rooms: {{ hotel.availableRooms }}</p>
+            <button class="btn btn-sm btn-primary" (click)="selectHotel(hotel.id)">Select</button>
+          </div>
+        </div>
+      </div>
+  }
+  </div>
+
+  @if (hasMoreHotels) {
+    <div class="d-flex justify-content-center mt-3">
+      <button class="btn btn-outline-secondary" [disabled]="loadingMoreHotels" (click)="loadMoreHotels()">
+        {{ loadingMoreHotels ? 'Loading more...' : 'Load More Hotels' }}
+      </button>
+    </div>
+  }
+}
+
+<div class="card mt-4">
+  <div class="card-body">
+    <h5>Create Booking @if (selectedHotelId) { for Hotel #{{ selectedHotelId }} }</h5>
+    <div class="row g-2">
+      <div class="col-md-3">
+        <label class="form-label">Check-in</label>
+        <input type="date" class="form-control" [(ngModel)]="checkInDate" />
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Check-out</label>
+        <input type="date" class="form-control" [(ngModel)]="checkOutDate" />
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">Rooms</label>
+        <input type="number" min="1" class="form-control" [(ngModel)]="roomsBooked" />
+      </div>
+      <div class="col-md-2 align-self-end">
+        <button class="btn btn-success w-100" (click)="createBooking()">Book</button>
+      </div>
+    </div>
+    @if (error) {
+      <div class="alert alert-danger mt-3 py-2">{{ error }}</div>
+    }
+    @if (success) {
+      <div class="alert alert-success mt-3 py-2">{{ success }}</div>
+    }
+  </div>
+</div>

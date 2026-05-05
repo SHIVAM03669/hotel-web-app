@@ -1,0 +1,53 @@
+<h4 class="mb-3">My Bookings</h4>
+
+@if (error) {
+  <div class="alert alert-danger py-2">{{ error }}</div>
+}
+
+@if (loadingBookings) {
+  <div class="row g-3" aria-label="Loading bookings">
+    @for (_ of [1, 2, 3, 4]; track $index) {
+      <div class="col-12">
+        <app-skeleton-screen variant="card" ariaLabel="Loading booking row" />
+      </div>
+    }
+  </div>
+} @else {
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Hotel</th>
+          <th>Dates</th>
+          <th>Rooms</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (booking of bookings; track booking.bookingId) {
+          <tr>
+            <td>#{{ booking.bookingId }}</td>
+            <td>{{ booking.hotelName }}</td>
+            <td>{{ booking.checkInDate }} to {{ booking.checkOutDate }}</td>
+            <td>{{ booking.roomsBooked }}</td>
+            <td>₹{{ booking.totalPrice }}</td>
+            <td>{{ booking.status }}</td>
+            <td>
+              @if (booking.status !== 'CANCELLED') {
+                <button class="btn btn-sm btn-outline-danger" (click)="cancelBooking(booking.bookingId)">
+                  Cancel
+                </button>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  @if (bookings.length === 0 && !error) {
+    <div class="alert alert-info py-2 mt-3">No bookings found for your account yet.</div>
+  }
+}
